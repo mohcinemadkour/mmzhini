@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta charset="utf-8" />
+        <title>mohamed zhini madkour blog - VAERS Reports</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">mohamed zhini madkour blog </a></h1>
+                <nav><ul>
+                    <li><a href="/category/interface-design.html">Interface Design</a></li>
+                    <li><a href="/category/temporal-data.html">Temporal data</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/Temporal clinical events clustering.html">Timeline of vaccine temporal events from VAERS reports</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2015-02-18T16:00:00+00:00">
+                Published: Wed 18 February 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/mohcine-madkour-jingcheng-du-hsing-yi-song-cui-tao.html">Mohcine Madkour, Jingcheng Du, Hsing-Yi Song, Cui Tao</a>
+        </address>
+<p>In <a href="/category/temporal-data.html">Temporal data</a>.</p>
+<p>tags: <a href="/tag/k-means.html">K-means</a> <a href="/tag/data-visualization.html">data visualization</a> <a href="/tag/vaers-reports.html">VAERS Reports</a> </p>
+</footer><!-- /.post-info --><h1>Temporal Clustering of Vaccine events</h1>
+<p><strong>Events in clinical narratives are naturally associated with medical trials, including surgery, vaccination, lab test, medication, medical procedure, and diagnosis. They are interrelated with many temporal relations. The grouping of medical events onto temporal clusters is a key to applications such as longitudinal studies, clinical question answering, and information retrieval. However, it is difficult to define clinical event quantitatively or consistently in coarse time-bins (e.g. before vaccination or after admission). In this article, I developed the K-means classifier to enable labeling a sequence of medical events with predefined time-bins. The features set is based solely on temporal distance similarity between boundaries of events. The result of the solution is integrated with the <a href="https://timeline.knightlab.com/">KnightLab timeline JS tool</a>.</strong></p>
+<p>In this article I investigate the task of tagging a sequence of events using a clustering algorithm. For this purpose I assume that each medical note can be associated with a predefined set of coarse of times that I refer to as time bins. For our example of VAERS note, the potential time-bins are: “before vaccination”, “soon after vaccination”, and “way after vaccination”. The time-bin “before vaccination” is intended to capture past medical history of the patient including the medical state of the patient on time of vaccination; “soon after vaccination” captures medical events that occurred immediately after the vaccination; and “way after vaccination” captures medical events that occurred after an extended duration from the vaccination. The issue in clustering events in predefined time-bins is that the time duration of each timebin varies based on the patient. For instance, the coarse of time “soon
+after vaccination” could be the first few hours after or a few days
+after depending on the general conditions. For that I consider that
+related events happen in relatively close proximity of time. I use a
+non-hierarchical clustering to classify the set of events. I consider
+the temporal distance between events as the measure of similarity
+between events of same clusters and dissimilarity between events of
+different clusters.</p>
+<h2>K-Means Clustering</h2>
+<p>K-means is one of the simplest algorithms for solving the
+clustering problem. Clustering is an unsupervised learning
+problem whereby I aim to group subsets of entities with one
+another based on a temporal distance similarity. The idea is to define
+k centroids for the k assumed clusters and to associate each point
+belonging to a given data set to the nearest center. A point represents
+the time instant of the event or the center of interval if its time
+interval event. When no point is pending, the first step is completed
+and an early group age is done. At this point I re-calculate k new
+centroids as barycenter of the clusters resulting from the previous
+step. After I have these k new centroids, I re-bind the same data
+set points to their nearest new center. A loop has been generated. As
+a result of this loop the k centers change their location step by step
+until no more changes are done or in other words centres do not
+move any more.</p>
+<h2>Timeline View</h2>
+<p>For data that relates to temporal events, the Timeline Widget adds an interesting dimension to your exhibit.</p>
+<p>The nobelists.js data file lists the years when the Nobelists won their prizes, so I can plot each one on a time line. To display timelines in Exhibit you need to include a separate utility, the Timeline widget. The Timeline widget is a bit bulky, so Exhibit doesn't include it by default. You have to include the time extension to Exhibit. Open the file nobelists.html, find the reference to exhibit-api.js and add the following script element after it:</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;div</span> <span class="na">data-ex-role=</span><span class="s">&quot;view&quot;</span><span class="nt">&gt;</span>
+    data-ex-view-class=&quot;Timeline&quot;  
+    data-ex-start=&quot;.time&quot; 
+    data-ex-end=&quot;.time2&quot; 
+    data-ex-color-key=&quot;.cluster&quot; 
+    data-ex-top-band-unit=&quot;month&quot; 
+    data-ex-bottom-band-unit=&quot;year&quot; 
+    data-ex-top-band-pixels-per-unit=&quot;90&quot; 
+    data-ex-bottom-band-pixels-per-unit=&quot;400&quot;
+        <span class="nt">&lt;div</span> <span class="na">data-ex-role=</span><span class="s">&quot;lens&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;span</span> <span class="na">data-ex-content=</span><span class="s">&quot;.hour&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>: 
+                <span class="nt">&lt;span</span> <span class="na">data-ex-content=</span><span class="s">&quot;.label&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+
+
+<h2>Visualization</h2>
+<p>I visualize the results using the Exhibit dashboard
+solution. The timeline dashboard enables intuitive cluster analysis
+by user interactions. Also our visualization allows summarizing by
+the various types of events information. <img alt="Here is a screeshot of the visualization" src="/images/timeline.png"> Check out the <a href="http://htmlpreview.github.io/?https://github.com/mohcinemadkour/Event-Timeline/blob/master/index.html">visualization of clustered events</a></p>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
